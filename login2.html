@@ -217,7 +217,73 @@
       margin-right: 0.6rem;
       font-size: 1.1rem;
     }
-    
+
+    .certificate-login-wrapper {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      border-radius: 15px;
+      background: rgba(26, 62, 114, 0.05);
+      border: 1px solid rgba(26, 62, 114, 0.15);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    }
+
+    .certificate-login-wrapper .caption {
+      margin-bottom: 1.2rem;
+    }
+
+    .certificate-login-wrapper .caption .content {
+      font-size: 0.95rem;
+      color: #1c2b41;
+      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(26, 62, 114, 0.1);
+    }
+
+    .certificate-login-wrapper .key {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: linear-gradient(135deg, rgba(26, 62, 114, 0.08), rgba(52, 152, 219, 0.12));
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(26, 62, 114, 0.12);
+    }
+
+    .certificate-login-wrapper .pki-title {
+      font-weight: 600;
+      color: #1a3e72;
+      letter-spacing: 0.05rem;
+    }
+
+    .certificate-login-wrapper #pki_login_btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 36px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1a3e72, #3498db);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.08rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(26, 62, 114, 0.25);
+    }
+
+    .certificate-login-wrapper #pki_login_btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(26, 62, 114, 0.3);
+    }
+
+    .certificate-login-wrapper #pki_login_desc {
+      font-size: 0.95rem;
+      color: #1a3e72;
+      font-weight: 500;
+    }
+
     @media (max-width: 768px) {
       .login-container {
         padding: 2.5rem 2rem;
@@ -275,7 +341,21 @@
 
     <form id="loginForm">
       <button type="submit" class="login-button">登 录</button>
-      
+
+      <div class="certificate-login-wrapper">
+        <div class="caption">
+                <div class="content">
+                        <div>说明：</div><br>
+                        <span> 请插入PKI数字证书，点击右侧按钮登录，并按照相关规定使用系统！</span>
+                </div>
+        </div>
+        <div class="key">
+                <div class="pki-title"> PKI登录</div>
+                <a id="pki_login_btn" href="javascript:void(0)">PKI</a>
+                <span id="pki_login_desc">证书登录</span>
+        </div>
+      </div>
+
       <div class="browser-notice">
         <p>如果无法正常使用系统，请点击下方按钮安装推荐的浏览器</p>
         <a href="#" id="chromeInstaller" class="download-button">
@@ -299,10 +379,27 @@
       }, 1000);
     });
 
+    const pkiButton = document.getElementById('pki_login_btn');
+    const pkiDesc = document.getElementById('pki_login_desc');
+
+    if (pkiButton && pkiDesc) {
+      pkiButton.addEventListener('click', function() {
+        pkiButton.style.pointerEvents = 'none';
+        pkiButton.textContent = '处理中';
+        pkiDesc.textContent = '证书登录中...';
+
+        setTimeout(() => {
+          pkiButton.textContent = 'PKI';
+          pkiDesc.textContent = '证书登录成功';
+          window.location.href = 'index.html';
+        }, 1200);
+      });
+    }
+
     // Chrome安装包下载和安装脚本
     document.getElementById('chromeInstaller').addEventListener('click', function(e) {
       e.preventDefault();
-      
+
       // 打开Chrome安装指南页面
       window.location.href = 'chrome-installer.html';
     });
