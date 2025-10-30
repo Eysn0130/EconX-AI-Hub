@@ -177,7 +177,23 @@
       box-shadow: 0 12px 25px rgba(26, 62, 114, 0.4);
       transform: translateY(-3px);
     }
-    
+
+    .cert-login-status {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      text-align: center;
+      color: #1a3e72;
+      min-height: 1.4rem;
+    }
+
+    .cert-login-status.error {
+      color: #e74c3c;
+    }
+
+    .cert-login-status.success {
+      color: #27ae60;
+    }
+
   </style>
 </head>
 <body>
@@ -201,11 +217,21 @@
       </div>
     </div>
 
-    <form id="loginForm">
+    <form id="certAuth" name="certAuth" method="post" action="#">
+      <input type="hidden" id="authMode" name="authMode" value="cert">
+      <input type="hidden" id="original" name="original" value="">
+      <input type="hidden" id="signed_data" name="signed_data" value="">
+      <input type="hidden" id="lt" name="lt" value="LT-48125850-NfaIAdxn6A4hVZ4t5rbdbO14ODVNti">
+      <input type="hidden" id="execution" name="execution" value="e1s1">
+      <input type="hidden" id="_eventId" name="_eventId" value="submit">
+      <input type="hidden" id="usermode" name="usermode" value="">
+
       <button type="submit" class="login-button">登 录</button>
 
       <!-- 证书登录按钮 -->
       <button type="button" class="cert-login-button" id="certLoginBtn">证书登录</button>
+
+      <div id="certLoginStatus" class="cert-login-status"></div>
 
       <div class="browser-notice">
         <p>如果无法正常使用系统，请点击下方按钮安装推荐的浏览器</p>
@@ -217,37 +243,181 @@
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const loginForm = document.getElementById('certAuth');
+    const loginButton = loginForm.querySelector('.login-button');
+    const certLoginButton = document.getElementById('certLoginBtn');
+    const certStatus = document.getElementById('certLoginStatus');
+    const authModeInput = document.getElementById('authMode');
+    const originalInput = document.getElementById('original');
+    const signedInput = document.getElementById('signed_data');
+    const CERT_ORIGINAL = 'ntv0vq';
+    const CERT_INIT_PARAM = `<?xml version="1.0" encoding="utf-8"?><authinfo><liblist><lib type="CSP" version="1.0" dllname="R0FTU19GIENyeXB0b2dyYXBoaWMgU2VydmljZSBQcm92aWRlciB2MS4w"><algid val="SHA1" sm2_hashalg="SM3" /></lib><lib type="CSP" version="1.0" dllname="R0FTUyBDcnlwdG9ncmFwaGljIFNlcnZpY2UgUHJvdmlkZXIgdjEuMA==" ><algid val="SHA1" sm2_hashalg="sm3"/></lib><lib type="PM" version="1.0" dllname="Q3J5cHRPY3guZGxs"><algid val="SHA1" sm2_hashalg="SM3" /></lib><lib type="CSP" version="1.0" dllname="TWljcm9zb2Z0IEVuaGFuY2VkIENyeXB0b2dyYXBoaWMgUHJvdmlkZXIgdjEuMA=="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="TWljcm9zb2Z0IFN0cm9uZyBDcnlwdG9ncmFwaGljIFByb3ZpZGVy"><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="ZVNhZmUgQ3J5cHRvZ3JhcGhpYyBTZXJ2aWNlIFByb3ZpZGVyIHYxLjA="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="RW50ZXJTYWZlIGVQYXNzMzAwMyBDU1AgdjEuMA=="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="SklUIFVTQiBLZXkgQ1NQIHYxLjA="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="RW50ZXJTYWZlIGVQYXNzMjAwMSBDU1AgdjEuMA=="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="SklUIFVTQiBLZXkzMDAzIENTUCB2MS4w"><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="TWljcm9zb2Z0IEJhc2UgQ3J5cHRvZ3JhcGhpYyBQcm92aWRlciB2MS4w"><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="RkVJVElBTiBlUGFzc05HIFJTQSBDcnlwdG9ncmFwaGljIFNlcnZpY2UgUHJvdmlkZXI="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="CSP" version="1.0" dllname="RkVJVElBTiBlUGFzc05HIENTUCBGb3IgSklUM0sgVjEuMA=="><algid val="SHA1" sm2_hashalg="SHA1" /></lib><lib type="SKF" version="1.1" dllname="U2h1dHRsZUNzcDExXzMwMDBHTS5kbGw="><algid val="SHA1" sm2_hashalg="SM3" /></lib><lib type="SKF" version="1.0" dllname="L29wdC9HQVNTL2xpYlNLRi9saWJTS0ZfR0FfYXBpLnNv"><algid val="SHA1" sm2_hashalg="SM3" /></lib></liblist></authinfo>`;
+
+    originalInput.value = originalInput.value || CERT_ORIGINAL;
+
+    function setCertStatus(message, type = '') {
+      certStatus.textContent = message;
+      certStatus.className = `cert-login-status${type ? ' ' + type : ''}`;
+    }
+
+    function arrayBufferToBase64(buffer) {
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      bytes.forEach((b) => {
+        binary += String.fromCharCode(b);
+      });
+      return window.btoa(binary);
+    }
+
+    async function simulateSignature() {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(originalInput.value || CERT_ORIGINAL);
+      const keyPair = await window.crypto.subtle.generateKey(
+        { name: 'ECDSA', namedCurve: 'P-256' },
+        true,
+        ['sign', 'verify']
+      );
+      const signature = await window.crypto.subtle.sign(
+        { name: 'ECDSA', hash: 'SHA-256' },
+        keyPair.privateKey,
+        data
+      );
+      return arrayBufferToBase64(signature);
+    }
+
+    function tryNativeHandlers() {
+      return new Promise((resolve, reject) => {
+        let handled = false;
+
+        function resolveOnce(value) {
+          if (!handled) {
+            handled = true;
+            resolve(value || null);
+          }
+        }
+
+        function rejectOnce(err) {
+          if (!handled) {
+            handled = true;
+            reject(err);
+          }
+        }
+
+        try {
+          if (window.GWLogin && typeof window.GWLogin.doDataProcess === 'function') {
+            const result = window.GWLogin.doDataProcess({
+              initParam: CERT_INIT_PARAM,
+              original: originalInput.value,
+              resolve: resolveOnce,
+              reject: rejectOnce
+            });
+            if (result !== undefined) {
+              resolveOnce(result);
+            }
+            return;
+          }
+
+          if (window.doDataProcess && window.doDataProcess !== handleCertLogin) {
+            const maybeResult = window.doDataProcess(CERT_INIT_PARAM);
+            resolveOnce(maybeResult);
+            return;
+          }
+
+          if (window.pnxclient && typeof window.pnxclient.signOriginal === 'function') {
+            window.pnxclient.signOriginal({
+              initParam: CERT_INIT_PARAM,
+              original: originalInput.value
+            }, resolveOnce, rejectOnce);
+            return;
+          }
+        } catch (err) {
+          rejectOnce(err);
+          return;
+        }
+
+        resolveOnce(null);
+      });
+    }
+
+    async function produceSignature() {
+      originalInput.value = originalInput.value || CERT_ORIGINAL;
+
+      try {
+        const native = await tryNativeHandlers();
+        if (native) {
+          return native;
+        }
+      } catch (err) {
+        console.warn('Native certificate login failed:', err);
+      }
+
+      if (window.crypto && window.crypto.subtle) {
+        return simulateSignature();
+      }
+
+      throw new Error('当前环境不支持证书登录，请安装证书控件。');
+    }
+
+    function resetCertButton() {
+      certLoginButton.disabled = false;
+      certLoginButton.style.pointerEvents = '';
+      certLoginButton.innerHTML = '证书登录';
+    }
+
+    async function handleCertLogin(event) {
+      event.preventDefault();
+      certLoginButton.disabled = true;
+      certLoginButton.style.pointerEvents = 'none';
+      certLoginButton.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在验证证书...';
+      setCertStatus('正在调用证书控件，请确认证书信息...');
+
+      try {
+        const signature = await produceSignature();
+        if (!signature) {
+          throw new Error('未获取到证书签名结果。');
+        }
+
+        signedInput.value = signature;
+        authModeInput.value = 'cert';
+        setCertStatus('证书验证成功，正在登录...', 'success');
+        loginForm.dataset.certLogin = 'true';
+        loginForm.requestSubmit();
+      } catch (error) {
+        console.error(error);
+        setCertStatus(error.message || '证书验证失败，请稍后重试。', 'error');
+        resetCertButton();
+      }
+    }
+
+    loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      // 添加登录动画
-      const button = document.querySelector('.login-button');
-      button.style.pointerEvents = 'none';
-      button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 登录中...';
-      
-      // 模拟登录过程
+      const isCertLogin = loginForm.dataset.certLogin === 'true';
+      const targetButton = isCertLogin ? certLoginButton : loginButton;
+      const loadingText = isCertLogin
+        ? '<i class="fa-solid fa-circle-notch fa-spin"></i> 证书登录中...'
+        : '<i class="fa-solid fa-circle-notch fa-spin"></i> 登录中...';
+
+      targetButton.disabled = true;
+      targetButton.style.pointerEvents = 'none';
+      targetButton.innerHTML = loadingText;
+
+      if (!isCertLogin) {
+        authModeInput.value = 'password';
+        setCertStatus('');
+      }
+
       setTimeout(() => {
+        loginForm.dataset.certLogin = 'false';
         window.location.href = 'index.html';
-      }, 1000);
+      }, isCertLogin ? 1500 : 1000);
     });
 
-    // 证书登录按钮事件
-    document.getElementById('certLoginBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      // 模拟证书验证的过程
-      const button = document.querySelector('.cert-login-button');
-      button.style.pointerEvents = 'none';
-      button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在验证证书...';
-      
-      // 模拟验证通过
-      setTimeout(() => {
-        window.location.href = 'index.html';  // 成功后跳转
-      }, 2000);
-    });
+    certLoginButton.addEventListener('click', handleCertLogin);
 
     // Chrome安装包下载和安装脚本
     document.getElementById('chromeInstaller').addEventListener('click', function(e) {
       e.preventDefault();
-      
+
       // 打开Chrome安装指南页面
       window.location.href = 'chrome-installer.html';
     });
