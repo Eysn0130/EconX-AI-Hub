@@ -17,3 +17,74 @@ a {
 a:hover {
   @apply text-police-light;
 }
+
+.aurora-bg {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.18), transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(14, 165, 233, 0.16), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.14), transparent 60%);
+  filter: blur(0);
+  animation: aurora-shift 24s linear infinite;
+  opacity: 0.9;
+}
+
+.login-aurora {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(from 180deg at 50% 50%, rgba(59, 130, 246, 0.35), rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.35));
+  animation: aurora-rotate 36s linear infinite;
+  filter: blur(120px);
+}
+
+.floating-particle {
+  position: absolute;
+  height: 420px;
+  width: 420px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), rgba(59, 130, 246, 0.08) 60%, transparent 70%);
+  animation: float-slow 18s ease-in-out infinite;
+}
+
+.floating-particle.delay-2000 {
+  animation-delay: 2s;
+}
+
+.floating-particle.delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes aurora-shift {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes aurora-rotate {
+  0% {
+    transform: rotate(0deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -40px, 0) scale(1.05);
+  }
+}

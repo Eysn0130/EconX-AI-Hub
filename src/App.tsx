@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ToolPage from './pages/ToolPage';
-import Login from './pages/Login';
 import Stats from './pages/Stats';
 import ChromeInstaller from './pages/ChromeInstaller';
 import LegacyGuizhou from './pages/LegacyGuizhou';
@@ -10,8 +10,9 @@ import Layout from './components/Layout';
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/home" element={<Dashboard />} />
       <Route path="/stats" element={<Stats />} />
       <Route path="/support/chrome-installer" element={<ChromeInstaller />} />
       <Route path="/legacy/guizhou-police-platform" element={<LegacyGuizhou />} />

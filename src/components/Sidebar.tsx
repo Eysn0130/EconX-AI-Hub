@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pin, PinOff } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { navigationSections, toolDefinitions } from '../data/tools';
@@ -9,6 +9,7 @@ const categoryOrder: ToolCategory[] = navigationSections.map((section) => sectio
 export default function Sidebar() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
 
   const groupedTools = useMemo(() => {
     return categoryOrder.reduce<Record<ToolCategory, typeof toolDefinitions>>((acc, category) => {
@@ -19,23 +20,33 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-20 z-30 h-[calc(100vh-5rem)] w-72 transform border-r border-slate-200 bg-white/95 shadow-xl transition-transform duration-300 ease-in-out backdrop-blur ${
-        isOpen ? 'translate-x-0' : '-translate-x-60 lg:translate-x-0'
+      onMouseEnter={() => !isPinned && setIsOpen(true)}
+      onMouseLeave={() => !isPinned && setIsOpen(false)}
+      className={`group fixed left-4 top-28 z-30 h-[calc(100vh-9rem)] w-72 origin-left rounded-3xl border border-white/15 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-2xl transition-all duration-500 ${
+        isOpen || isPinned ? 'translate-x-0 opacity-100' : '-translate-x-80 opacity-90 lg:-translate-x-[65%]'
       }`}
     >
       <button
         type="button"
         onClick={() => setIsOpen((value) => !value)}
-        className="absolute -right-10 top-6 flex h-10 w-10 items-center justify-center rounded-r-xl bg-white shadow-lg ring-1 ring-slate-200 transition hover:bg-slate-50 lg:hidden"
+        className="absolute -right-10 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white shadow-lg backdrop-blur transition hover:bg-white/30 lg:hidden"
         aria-label={isOpen ? '收起导航' : '展开导航'}
       >
-        {isOpen ? <ChevronLeft className="h-4 w-4 text-police-blue" /> : <ChevronRight className="h-4 w-4 text-police-blue" />}
+        {isOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
       </button>
-      <div className="h-full overflow-y-auto px-4 pb-8 pt-6">
+      <button
+        type="button"
+        onClick={() => setIsPinned((value) => !value)}
+        className="absolute -right-12 bottom-10 hidden h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white shadow-lg backdrop-blur transition hover:bg-white/20 lg:flex"
+        aria-label={isPinned ? '取消固定导航' : '固定导航'}
+      >
+        {isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
+      </button>
+      <div className="h-full overflow-y-auto px-5 pb-10 pt-8 text-white">
         {navigationSections.map((section) => (
           <div key={section.key} className="mb-8">
-            <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-              <span className="h-1.5 w-1.5 rounded-full bg-police-blue" />
+            <div className="mb-4 flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-blue-100/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
               {section.title}
             </div>
             <nav className="space-y-1">
@@ -44,20 +55,20 @@ export default function Sidebar() {
                   key={tool.slug}
                   to={tool.path}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                    `group flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition ${
                       isActive || location.pathname === tool.path
-                        ? 'bg-police-blue/10 text-police-blue'
-                        : 'text-slate-600 hover:bg-police-blue/5 hover:text-police-blue'
+                        ? 'bg-white/20 text-white'
+                        : 'text-blue-100/80 hover:bg-white/10 hover:text-white'
                     }`
                   }
                   onClick={() => setIsOpen(false)}
                 >
-                  <span className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-police-blue/10 text-lg text-police-blue transition group-hover:scale-110 group-hover:bg-police-blue group-hover:text-white">
+                  <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-lg text-white transition group-hover:scale-110 group-hover:bg-white/20">
                     <tool.icon className="h-5 w-5" />
                   </span>
                   <div className="flex flex-col">
                     <span>{tool.title}</span>
-                    {tool.subtitle && <span className="text-xs font-normal text-slate-400">{tool.subtitle}</span>}
+                    {tool.subtitle && <span className="text-xs font-normal text-blue-100/60">{tool.subtitle}</span>}
                   </div>
                 </NavLink>
               ))}
