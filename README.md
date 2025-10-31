@@ -1,70 +1,49 @@
-经济犯罪侦查工作平台 - 页面索引
+# 经智 AI 智能体工作平台
 
-1. 主要页面
----------------
-index.html          - 平台主页，包含所有功能模块入口
+基于 [Vite](https://vitejs.dev/) + React + Tailwind CSS 构建的经济犯罪智能体工作台。项目将原有的分散 HTML 页面进行重构，统一为模块化的单页应用，提供更好的可维护性与扩展性。
 
-2. 通用功能
----------------
-general-ai.html     - 通用AI助手，提供智能对话界面
-general-case.html   - 通用案件研判，包含案件管理和研判功能
-doc-writing.html    - 公文写作助手，提供文书写作辅助功能
+## 主要特性
 
-3. 专业领域
----------------
-finance-case.html   - 金融领域，包含金融犯罪分析和研判
-securities-case.html - 证券领域，包含市场监控和异常分析
-tax-case.html       - 涉税领域，包含发票分析和风险预警
-trade-case.html     - 商贸领域，包含交易监控和趋势分析
-money-laundering.html - 反洗钱领域，包含资金流向分析和预警
+- 🧭 **统一导航与布局**：通过 `Layout`、`Sidebar`、`TopBar` 组件复用顶栏与侧边导航，保证各工具页的一致体验。
+- 🧠 **智能体矩阵**：`/tools/:slug` 路由根据 `src/data/tools.ts` 中的配置自动生成 iframe 工具页，覆盖通用、专业、研判与运维场景。
+- 📊 **运行态势监控**：`/stats` 页面基于 Chart.js 展示会话趋势、模块占比、时段活跃度与满意度指标。
+- 🔐 **统一认证入口**：`/login` 页面提供多因子认证说明，强化登录入口的视觉与交互设计。
+- 🛠️ **运维支撑**：`/support/chrome-installer`、`/legacy/guizhou-police-platform` 汇总浏览器部署与历史系统信息。
 
-4. 研判工具
----------------
-person-info-analysis.html - 人员基础信息分析，提供嫌疑人信息综合研判
-police-data-analysis.html - 警情数据分析，提供警情统计和趋势研判
+## 启动方式
 
-5. 辅助工具
----------------
-evidence-analysis.html - 金析为证，提供证据分析和管理功能
-case-guide.html     - 办案指引，提供案件办理规范和指导
-data-analysis.html  - 数据分析，提供多维度数据分析功能
+```bash
+npm install
+npm run dev
+```
 
-页面设计特点：
-1. 统一的设计风格和配色方案
-   - 使用警察蓝色系：深蓝(#1a3e72)、浅蓝(#4a6fa5)
-   - 统一的渐变背景和阴影效果
-   - 一致的字体和图标样式
+构建发布：
 
-2. 响应式布局，适配不同设备
-   - 桌面端完整显示
-   - 移动端自适应布局
-   - 侧边栏自动收缩
+```bash
+npm run build
+```
 
-3. 导航系统
-   - 固定顶部导航栏
-   - 可收缩侧边导航栏
-   - 面包屑导航路径
+## 目录结构
 
-4. 界面元素
-   - Font Awesome图标库
-   - 统一的按钮样式
-   - 一致的卡片设计
-   - 平滑的动画过渡
+```
+├── public/                # 静态资源（favicon 等）
+├── src/
+│   ├── components/        # 布局与导航组件
+│   ├── data/              # 智能体、仪表盘数据配置
+│   ├── pages/             # 各业务页面（Dashboard、ToolPage 等）
+│   ├── styles/            # 全局样式（Tailwind）
+│   └── main.tsx           # 应用入口
+├── index.html             # Vite 模板入口
+├── package.json
+├── tsconfig*.json
+└── vite.config.ts
+```
 
-5. 功能特性
-   - iframe内容加载
-   - 实时日期显示
-   - 页面间无缝跳转
-   - 返回首页功能
+## 数据配置
 
-6. 技术实现
-   - HTML5语义化标签
-   - CSS3现代特性
-   - 响应式Grid布局
-   - JavaScript交互
-   - 模块化组织结构 
+- 智能体定义集中在 `src/data/tools.ts`，可维护标题、描述、图标、iframe 地址等信息；侧边导航与首页卡片均从该配置派生。
+- 仪表盘与统计页的演示数据位于 `src/data/dashboard.ts` 及 `src/pages/Stats.tsx`，可根据真实接口替换。
 
-7. 服务器
-   - 地址：83.3.23.117，端口：22222
-   - 账号：root
-   - 密码：Jzzd@qbk037880
+## 浏览器兼容
+
+默认使用现代浏览器特性。若需兼容旧环境，可在 `vite.config.ts` 中接入 `@vitejs/plugin-legacy` 或按需引入 polyfill。
