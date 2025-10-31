@@ -12,7 +12,7 @@ export default function Sidebar() {
 
   const groupedTools = useMemo(() => {
     return categoryOrder.reduce<Record<ToolCategory, typeof toolDefinitions>>((acc, category) => {
-      acc[category] = toolDefinitions.filter((tool) => tool.category === category && tool.iframeUrl);
+      acc[category] = toolDefinitions.filter((tool) => tool.category === category);
       return acc;
     }, {} as Record<ToolCategory, typeof toolDefinitions>);
   }, []);

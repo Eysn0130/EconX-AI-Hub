@@ -9,11 +9,12 @@ export default function ToolPage() {
 
   const tool = useMemo(() => toolDefinitions.find((item) => item.slug === slug), [slug]);
 
-  if (!tool || !tool.iframeUrl) {
+  if (!tool) {
     return <Navigate to="/" replace />;
   }
 
   const Icon = tool.icon;
+  const hasIframe = Boolean(tool.iframeUrl);
 
   return (
     <Layout title={tool.title} subtitle={tool.subtitle}>
@@ -34,14 +35,29 @@ export default function ToolPage() {
               </span>
             </div>
           </section>
-          <section className="h-[70vh] min-h-[520px] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
-            <iframe
-              src={tool.iframeUrl}
-              title={tool.title}
-              className="h-full w-full"
-              allow="microphone"
-            />
-          </section>
+          {hasIframe ? (
+            <section className="h-[70vh] min-h-[520px] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
+              <iframe
+                src={tool.iframeUrl}
+                title={tool.title}
+                className="h-full w-full"
+                allow="microphone"
+              />
+            </section>
+          ) : (
+            <section className="flex min-h-[320px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-police-blue/40 bg-white/80 p-10 text-center shadow-lg">
+              <Icon className="h-12 w-12 text-police-blue" />
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-police-dark">暂无内嵌界面</h3>
+                <p className="text-sm leading-relaxed text-slate-600">
+                  当前智能体尚未提供内嵌操作界面，请通过导航访问对应专题页面或联系运维获取更多信息。
+                </p>
+              </div>
+              <Link to="/" className="text-sm font-semibold text-police-blue hover:text-police-light">
+                返回工作台
+              </Link>
+            </section>
+          )}
         </div>
         <aside className="w-full max-w-sm space-y-6">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
@@ -65,7 +81,7 @@ export default function ToolPage() {
             <h3 className="mb-3 text-base font-semibold text-police-dark">关联智能体</h3>
             <ul className="space-y-3 text-sm text-police-blue">
               {toolDefinitions
-                .filter((item) => item.category === tool.category && item.slug !== tool.slug && item.iframeUrl)
+                .filter((item) => item.category === tool.category && item.slug !== tool.slug)
                 .slice(0, 3)
                 .map((item) => (
                   <li key={item.slug} className="flex items-center justify-between">

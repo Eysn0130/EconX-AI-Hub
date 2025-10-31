@@ -5,7 +5,7 @@ import {
   BarChart3,
   Bot,
   Building,
-  ChartColumn,
+  BarChart4,
   Chrome,
   Compass,
   FileText,
@@ -191,7 +191,7 @@ export const toolDefinitions: ToolDefinition[] = [
     title: '系统使用统计',
     subtitle: 'Usage Analytics',
     description: '实时掌握平台活跃度、工具使用频次与绩效指标，为迭代提供依据。',
-    icon: ChartColumn,
+    icon: BarChart4,
     category: 'support'
   },
   {
