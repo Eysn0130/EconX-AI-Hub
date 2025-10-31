@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  @apply bg-police-gray text-police-dark font-['Microsoft_YaHei',sans-serif];
+}
+
+a {
+  @apply text-police-blue transition-colors duration-200;
+}
+
+a:hover {
+  @apply text-police-light;
+}
