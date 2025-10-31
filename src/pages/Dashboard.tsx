@@ -139,7 +139,7 @@ export default function Dashboard() {
               </div>
               <ul className="space-y-3 text-sm text-slate-600">
                 {toolDefinitions
-                  .filter((tool) => tool.category === section.key && tool.iframeUrl)
+                  .filter((tool) => tool.category === section.key)
                   .map((tool) => (
                     <li key={tool.slug} className="flex items-start gap-3">
                       <span className="mt-1 text-police-blue">

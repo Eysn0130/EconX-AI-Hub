@@ -1,4 +1,4 @@
-import { Headset, IdCard, LogIn, Network, ShieldCheck, Sparkles, UserShield } from 'lucide-react';
+import { ContactRound, Headset, LogIn, Network, Shield, ShieldCheck, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import Layout from '../components/Layout';
 
@@ -35,7 +35,7 @@ export default function Login() {
           <div className="w-full bg-white p-10 lg:w-3/5">
             <div className="mb-8 text-center">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-police-blue/10 text-3xl text-police-blue">
-                <UserShield className="h-8 w-8" />
+                <Shield className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-semibold text-police-dark">登录平台</h3>
               <p className="mt-2 text-sm text-slate-500">使用公安专网账号登录，完成统一认证后访问所有智能体。</p>
@@ -87,7 +87,7 @@ export default function Login() {
             <div className="mt-8 grid gap-4 rounded-2xl bg-slate-50 p-4 text-xs text-slate-500">
               <div className="flex items-center gap-3">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-police-blue/10 text-police-blue">
-                  <IdCard className="h-4 w-4" />
+                  <ContactRound className="h-4 w-4" />
                 </span>
                 <span>支持PKI证书、黔警认证APP扫码、口令等多因子方式。</span>
               </div>
