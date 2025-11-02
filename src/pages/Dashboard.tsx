@@ -120,13 +120,16 @@ const econExclusive = [
 ];
 
 export default function Dashboard() {
+  const [primaryModule, ...supportModules] = generalAiModules;
+  const PrimaryIcon = primaryModule?.icon;
+
   return (
     <Layout title="经智AI智能体工作平台" subtitle="Economic Crime Intelligence Platform" showBack={false}>
       <Reveal
         as="section"
-        className="mb-12 grid gap-6 rounded-[2.5rem] border border-white/70 bg-white/80 p-10 text-slate-900 shadow-[0_40px_120px_rgba(148,163,184,0.25)] backdrop-blur-2xl lg:grid-cols-[1.4fr,1fr]"
+        className="mb-12 grid gap-10 rounded-[2.5rem] border border-white/70 bg-white/80 p-10 text-slate-900 shadow-[0_40px_120px_rgba(148,163,184,0.25)] backdrop-blur-2xl lg:grid-cols-[1.35fr,1fr]"
       >
-        <div className="flex flex-col justify-between gap-8">
+        <div className="flex flex-col justify-between gap-10">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500 shadow-sm">
               <Sparkles className="h-4 w-4 text-police-blue" />
@@ -138,6 +141,49 @@ export default function Dashboard() {
             <p className="max-w-xl text-sm text-slate-600 sm:text-base">
               从通用认知、领域办案到文书流转，平台以毛玻璃风格承载核心能力，为民警提供沉浸式、可信赖的高效工作体验。
             </p>
+          </div>
+          <div className="grid gap-4 text-sm sm:grid-cols-2">
+            {supportModules.map((module, index) => {
+              const Icon = module.icon;
+              const tone =
+                index === 0
+                  ? 'from-purple-500/18 via-sky-400/12 to-indigo-400/15'
+                  : 'from-emerald-400/18 via-teal-300/14 to-sky-300/10';
+
+              return (
+                <Reveal key={module.title} delay={0.08 * (index + 1)} className="h-full">
+                  <Link
+                    to={module.link}
+                    className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-3xl border border-white/70 bg-white/85 p-5 text-slate-700 shadow-[0_24px_70px_rgba(148,163,184,0.22)] backdrop-blur-xl transition hover:-translate-y-1 hover:text-police-blue"
+                  >
+                    <span
+                      className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                    />
+                    <div className="relative flex items-center gap-3">
+                      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-police-blue shadow-inner">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <div className="flex flex-col">
+                        <h3 className="text-base font-semibold text-slate-900">{module.title}</h3>
+                        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-400">Multimodal Intelligence</span>
+                      </div>
+                    </div>
+                    <p className="relative text-sm text-slate-500">{module.description}</p>
+                    <div className="relative mt-auto flex flex-wrap gap-2 text-[0.68rem] uppercase tracking-[0.2em] text-slate-400">
+                      {module.metrics.map((item) => (
+                        <span key={item} className="rounded-full border border-white/80 bg-white/70 px-3 py-1">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="relative mt-2 inline-flex items-center gap-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-slate-500">
+                      进入模块
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                </Reveal>
+              );
+            })}
           </div>
           <div className="flex flex-wrap gap-4 text-sm">
             <Link
@@ -156,34 +202,38 @@ export default function Dashboard() {
             </Link>
           </div>
         </div>
-        <div className="grid gap-4">
-          {generalAiModules.map((module, index) => {
-            const Icon = module.icon;
-            return (
-              <Reveal key={module.title} delay={0.1 * index} className="h-full">
-                <Link
-                  to={module.link}
-                  className="group flex h-full flex-col gap-3 rounded-2xl border border-white/70 bg-white/80 p-5 text-slate-700 shadow-[0_20px_60px_rgba(148,163,184,0.25)] backdrop-blur transition hover:-translate-y-1 hover:text-police-blue"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-police-blue shadow-inner">
-                    <Icon className="h-6 w-6" />
+        {primaryModule && PrimaryIcon && (
+          <Reveal delay={0.05} className="h-full">
+            <Link
+              to={primaryModule.link}
+              className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-[2.2rem] border border-white/70 bg-white/85 p-8 text-slate-700 shadow-[0_32px_90px_rgba(148,163,184,0.28)] backdrop-blur-2xl transition-transform duration-500 hover:-translate-y-1 hover:text-police-blue"
+            >
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-500/30 via-blue-500/22 to-indigo-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative flex items-center gap-4">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-police-blue shadow-inner">
+                  <PrimaryIcon className="h-6 w-6" />
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">General Intelligence Hub</span>
+                  <h3 className="text-2xl font-semibold text-slate-900">{primaryModule.title}</h3>
+                </div>
+              </div>
+              <p className="relative text-base text-slate-500">{primaryModule.description}</p>
+              <div className="relative grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
+                {primaryModule.metrics.map((item) => (
+                  <span key={item} className="flex items-center gap-2 rounded-2xl border border-white/80 bg-white/70 px-4 py-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-400/80" />
+                    {item}
                   </span>
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900">{module.title}</h3>
-                    <p className="mt-2 text-sm text-slate-500">{module.description}</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2 text-[0.7rem] uppercase tracking-[0.2em] text-slate-400">
-                    {module.metrics.map((item) => (
-                      <span key={item} className="rounded-full border border-white/80 bg-white/70 px-3 py-1">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </Link>
-              </Reveal>
-            );
-          })}
-        </div>
+                ))}
+              </div>
+              <span className="relative mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-slate-500">
+                调度中枢
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </Reveal>
+        )}
       </Reveal>
 
       <Reveal as="section" className="mb-14">

@@ -42,8 +42,8 @@ export default function Layout({ title, subtitle, showSidebar = true, showBack =
           />
         )}
         <main
-          className={`relative z-20 mx-auto w-full max-w-6xl px-6 pb-24 pt-36 transition-all duration-500 sm:px-10 lg:px-14 ${
-            showSidebar ? 'lg:pl-[6.25rem] xl:pl-[7.5rem]' : 'lg:px-20'
+          className={`layout-main relative z-20 mx-auto w-full px-6 pb-24 pt-36 transition-all duration-500 sm:px-10 lg:px-12 ${
+            showSidebar ? 'layout-main--with-sidebar' : 'layout-main--no-sidebar'
           }`}
           onClick={() => {
             if (mobileNavOpen) {
@@ -51,7 +51,7 @@ export default function Layout({ title, subtitle, showSidebar = true, showBack =
             }
           }}
         >
-          <div className="mx-auto w-full max-w-5xl lg:max-w-6xl xl:max-w-6xl">{children}</div>
+          <div className="mx-auto w-full max-w-[min(1120px,calc(100vw-4rem))] xl:max-w-[1200px]">{children}</div>
         </main>
       </div>
     </div>

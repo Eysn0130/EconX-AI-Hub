@@ -116,6 +116,20 @@ a:hover {
   filter: blur(18px);
 }
 
+@media (min-width: 1024px) {
+  .layout-main {
+    padding-right: clamp(3rem, calc((100vw - 1120px) / 2 + 3rem), 8rem);
+  }
+
+  .layout-main--with-sidebar {
+    padding-left: clamp(6.5rem, calc((100vw - 1120px) / 2 + 7rem), 14rem);
+  }
+
+  .layout-main--no-sidebar {
+    padding-left: clamp(3rem, calc((100vw - 1120px) / 2 + 3rem), 8rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-element,
   .reveal-element::after {

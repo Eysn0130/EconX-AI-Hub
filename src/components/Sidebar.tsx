@@ -24,22 +24,31 @@ export default function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
   }, []);
 
   const isExpanded = isPinned || isHovering || mobileOpen;
+  const collapsed = !isExpanded;
 
   return (
     <aside
       onMouseEnter={() => !mobileOpen && setIsHovering(true)}
       onMouseLeave={() => !mobileOpen && setIsHovering(false)}
-      className={`group fixed left-6 top-32 z-40 flex h-[calc(100vh-10rem)] flex-col overflow-hidden rounded-[32px] border border-white/70 bg-white/65 text-slate-700 shadow-[0_36px_110px_rgba(148,163,184,0.3)] backdrop-blur-2xl transition-all duration-500 ${
-        isExpanded ? 'w-72 px-5' : 'w-[5.5rem] px-3'
-      } ${mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 lg:translate-x-0 lg:opacity-100'}`}
+      className={`group fixed left-6 top-32 z-40 flex h-[calc(100vh-10rem)] flex-col overflow-hidden rounded-[32px] border border-white/70 bg-white/60 text-slate-700 shadow-[0_36px_110px_rgba(148,163,184,0.3)] backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${
+        isExpanded ? 'w-[18.5rem] px-6' : 'w-[5.5rem] px-3'
+      } ${mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-[115%] opacity-0 lg:translate-x-0 lg:opacity-100'}`}
     >
       <span className="pointer-events-none absolute inset-x-4 top-2 h-[1px] rounded-full bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-      <span className="pointer-events-none absolute -right-6 top-1/2 hidden h-20 w-12 -translate-y-1/2 rounded-full border border-white/60 bg-white/60 shadow-[0_18px_40px_rgba(148,163,184,0.25)] backdrop-blur-xl transition group-hover:-translate-x-2 lg:block" />
+      <span
+        className={`pointer-events-none absolute -right-7 top-1/2 hidden h-24 w-12 -translate-y-1/2 rounded-full border border-white/60 bg-white/70 shadow-[0_20px_45px_rgba(148,163,184,0.25)] backdrop-blur-xl transition-all duration-500 lg:block ${
+          collapsed ? 'translate-x-2 opacity-90 group-hover:translate-x-0 group-hover:opacity-100' : 'translate-x-6 opacity-0'
+        }`}
+      >
+        <span className="absolute inset-0 flex items-center justify-center text-[0.6rem] font-semibold uppercase tracking-[0.35em] text-slate-400 [writing-mode:vertical-rl]">
+          Menu
+        </span>
+      </span>
       <div className="flex items-center justify-between pt-6">
         <div className="flex items-center gap-3">
           <span
-            className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-white/90 text-police-blue shadow-[0_20px_40px_rgba(148,163,184,0.22)] transition-transform duration-500 ${
-              isExpanded ? '' : 'scale-95'
+            className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-white/90 text-police-blue shadow-[0_20px_40px_rgba(148,163,184,0.22)] transition-all duration-500 ${
+              isExpanded ? '' : 'scale-90'
             }`}
           >
             <Shield className="h-5 w-5" />
@@ -87,18 +96,28 @@ export default function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
                   to={tool.path}
                   title={tool.title}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 rounded-2xl text-sm font-medium transition-all duration-300 ${
-                      isExpanded ? 'px-3 py-2' : 'justify-center px-2 py-2'
+                    `group relative flex items-center gap-3 rounded-2xl text-sm font-medium transition-all duration-300 ${
+                      isExpanded ? 'px-3 py-2' : 'justify-center px-2.5 py-2'
                     } ${
                       isActive || location.pathname === tool.path
-                        ? 'bg-white text-police-blue shadow-[0_15px_30px_rgba(148,163,184,0.18)]'
-                        : 'text-slate-600 hover:bg-white/85 hover:text-police-blue'
+                        ? 'bg-white/95 text-police-blue shadow-[0_18px_45px_rgba(148,163,184,0.18)]'
+                        : 'text-slate-600 hover:bg-white/80 hover:text-police-blue'
                     }`
                   }
                   onClick={() => onMobileToggle(false)}
                 >
-                  <span className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-lg text-police-blue shadow-[0_12px_26px_rgba(148,163,184,0.25)] transition-all duration-500 group-hover:scale-110 group-hover:bg-white">
+                  <span
+                    className={`pointer-events-none absolute left-0 top-1/2 h-10 w-1 -translate-x-2 -translate-y-1/2 rounded-full bg-gradient-to-b from-sky-400/70 via-blue-500/60 to-transparent transition-all duration-300 ${
+                      isExpanded && location.pathname === tool.path ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                    }`}
+                  />
+                  <span className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-white/85 text-lg text-police-blue shadow-[0_12px_30px_rgba(148,163,184,0.22)] transition-all duration-500 group-hover:scale-[1.08] group-hover:bg-white">
                     <tool.icon className="h-5 w-5" />
+                    <span
+                      className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 via-sky-400/10 to-cyan-400/5 opacity-0 transition-all duration-500 group-hover:opacity-100 ${
+                        location.pathname === tool.path ? 'opacity-100' : ''
+                      }`}
+                    />
                   </span>
                   <div
                     className={`flex flex-col text-left transition-all duration-500 ${
