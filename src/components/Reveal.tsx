@@ -8,7 +8,6 @@ interface RevealProps {
   delay?: number;
   once?: boolean;
   style?: CSSProperties;
-  id?: string;
 }
 
 export default function Reveal({
@@ -17,8 +16,7 @@ export default function Reveal({
   className,
   delay = 0,
   once = true,
-  style,
-  id
+  style
 }: RevealProps) {
   const elementRef = useRef<HTMLElement | null>(null);
 
@@ -56,7 +54,6 @@ export default function Reveal({
   return (
     <Component
       ref={elementRef as never}
-      id={id}
       className={`reveal-element ${className ?? ''}`.trim()}
       style={{ ...(style ?? {}), transitionDelay: `${delay}s` }}
     >
