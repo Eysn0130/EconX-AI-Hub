@@ -1,3 +1,4 @@
+// src/main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
@@ -6,7 +7,7 @@ import './styles/global.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <HashRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+    <HashRouter>
       <App />
     </HashRouter>
   </React.StrictMode>
