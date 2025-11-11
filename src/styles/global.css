@@ -14,6 +14,158 @@ body {
     #f8fafc;
 }
 
+.topbar-shell {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 247, 250, 0.94));
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.topbar-shell::before {
+  content: '';
+  position: absolute;
+  inset: -40% -10% auto -10%;
+  height: 120%;
+  background: radial-gradient(circle at 10% 30%, rgba(59, 130, 246, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.16), transparent 60%),
+    radial-gradient(circle at 50% -10%, rgba(147, 197, 253, 0.25), transparent 70%);
+  filter: blur(55px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.topbar-shell__inner {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  display: flex;
+  width: min(1200px, 100%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.1rem clamp(1rem, 3vw, 1.75rem);
+}
+
+.topbar-shell__crest {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #2563eb, #6366f1, #0ea5e9);
+  box-shadow:
+    0 18px 32px rgba(37, 99, 235, 0.25),
+    inset 0 0 22px rgba(255, 255, 255, 0.25);
+}
+
+.topbar-shell__crest::after {
+  content: '';
+  position: absolute;
+  inset: 16%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), transparent 60%);
+}
+
+.topbar-shell__crest::before {
+  content: '';
+  position: absolute;
+  bottom: -28%;
+  left: 50%;
+  width: 70%;
+  height: 35%;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.35), transparent 70%);
+  filter: blur(12px);
+}
+
+.topbar-shell__avatar {
+  position: relative;
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.35rem;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(59, 130, 246, 0.9));
+  color: white;
+  box-shadow: 0 16px 35px rgba(59, 130, 246, 0.3);
+}
+
+.topbar-shell__avatar::after {
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), transparent 60%);
+  mix-blend-mode: screen;
+}
+
+.topbar-shell__avatar--large {
+  height: 3.25rem;
+  width: 3.25rem;
+  border-radius: 1.6rem;
+}
+
+.futuristic-icon {
+  position: relative;
+  display: inline-flex;
+  height: 3.25rem;
+  width: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.4rem;
+  color: white;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    0 28px 55px rgba(15, 23, 42, 0.18),
+    inset 0 0 22px rgba(255, 255, 255, 0.2);
+}
+
+.futuristic-icon__beam {
+  position: absolute;
+  inset: -40%;
+  border-radius: 2.75rem;
+  filter: blur(28px);
+  opacity: 0.85;
+  transform: rotate(18deg);
+}
+
+.futuristic-icon__ring {
+  position: absolute;
+  bottom: -25%;
+  left: 50%;
+  width: 80%;
+  height: 40%;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  filter: blur(14px);
+  opacity: 0.85;
+}
+
+.futuristic-icon__shine {
+  position: absolute;
+  inset: 15%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.85), transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+
+.futuristic-icon__glyph {
+  position: relative;
+  z-index: 1;
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
 a {
   @apply text-police-blue transition-colors duration-200;
 }
